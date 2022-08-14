@@ -1,0 +1,115 @@
+	############################################### Laravel #########################################
+	->At first download composer & install
+	
+	->To check composer: 
+		composer
+
+	->To Download the Laravel installer:
+		composer global require "laravel/installer"
+
+	->Create project: 
+		1. Using laravel: laravel new blog   
+		2. Using composer: composer create-project --prefer-dist laravel/laravel blog
+
+	->To start a development server: php artisan serve:
+		If given server not works corectly use this command: php -S localhost:8000 -t public/
+	
+	-> Install vue dependencies:
+		npm install --save vuex vue-router vee-validate vue-izitoast vuex-persistedstate
+		
+	->To run vue in laravel:
+		npm run watch
+	
+	->To check artisan commnd list:
+		php artisan list
+	
+	->Before change the file directory run those:
+		php artisan config:cache
+		php artisan route:cache
+		
+	->To create atuthentication forms and page:
+		php artisan make:auth
+		
+	->To check all route list:
+		php artisan route:list OR r:l
+
+	->To make model: 
+		1. For only model: php artisan make:model modelName 
+		N.B: If you use this make sure that your DB table name is the plural form of your model name, Otherwise you have to specify the table property like this
+
+		class Flight extends Model
+		{
+			/**
+			 * The table associated with the model.
+			 *
+			 * @var string
+			 */
+			protected $table = 'my_flights';
+		}
+		
+		2. For model with migration: php artisan make:model modelName --migration OR -m
+		
+	->To generating migrations: 
+		The --table and --create options may also be used to indicate the name of the table and whether the migration will be creating a new table
+		
+		To create new table: php artisan make:migration create_users_table --create=users
+
+		To add new column in existing table: php artisan make:migration add_votes_to_users_table --table=users
+		
+	->To create databese table run migrations:
+		php artisan migrate
+		
+		If leangth related problem than
+		1. In the databse migration - Set email or others attributes length (ex: $table->string('email',100)->unique())
+		2. Change this file
+		In -> App\Providers\AppServiceProvider.php
+		
+		Place this code ->
+		use Illuminate\Support\Facades\Schema;
+
+		public function boot()
+		{
+			Schema::defaultStringLength(191);
+		}
+		
+	->To modify existing table run migrations:
+		php artisan migrate:refresh (N.B: All table data will be empty)
+	
+	->To create controller:
+		1. Normal Controller: php artisan make:controller controllerName
+		
+		2. Resource Controller: php artisan make:controller controllerName --resource OR -r
+		   For this resource controller route will be
+		   Route::resource('data', 'resourceControllerName');	
+		   
+		3. Invikable Controller: php artisan make:controller controllerName --invokable
+		
+	->To create middleware:
+		php artisan make:middleware middlewareName
+	
+	->To create fake data using faker & seeder
+		 php artisan db:seed (For this you have to configure UserFactory.php & DatabaseSeeder.php)
+		 or
+		 You can user tinker to create fake data into db with only configure the factory
+		 First, php artisan tinker
+		 Then,  factory(modelName::class, howManyYouWant)->create()
+			ex: factory(App\Category::class, 50)->create()
+
+	->To use pagiantion 
+		Goto pagination under database of laravel documentation (https://laravel.com/docs/5.7/pagination)
+		
+		##################################################################################################
+
+		public function login(Request $request){
+			if($request->isMethod('post')){
+				$data = $request->input();
+				if(Auth::attempt(['email'->$data['email'],'password'->$data['password']])){
+					echo "Success"; die;
+				}
+				else{
+					echo "Failled"; die;
+				}
+			}
+			return view('project.login');
+		}
+
